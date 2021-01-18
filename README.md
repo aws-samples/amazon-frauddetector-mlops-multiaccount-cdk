@@ -104,7 +104,7 @@ To create a multi-account Codepipeline workflow to deploy Fraud Detector, See [.
 
 
 
-## Useful resources
+#### Useful resources
 
 -  [AWS Fraud Detector github samples](https://github.com/aws-samples/aws-fraud-detector-samples/blob/master/Fraud%20Detector%20End%20to%20End/Fraud_Detector_End_to_End.ipynb)
 
