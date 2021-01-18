@@ -1,5 +1,6 @@
 
 # MLOps pipeline for Amazon Fraud Detector
+![../docs/MultiAccountMLOps.png](../docs/MultiAccountMLOps.png)
 
 ## Prerequisites
 
@@ -110,4 +111,6 @@ In this step, we create a bucket that has bucket policies that allows cross acco
         python ./infra/src/app_deploy_config.py --configfile build/ml_pipeline_config.sample.json --stacktype  S3MLPipeline --profile mlopstools
    ```
 
-     
+If everything works, you will see a pipeline similar to the one 
+
+ ![docs](docs/CodepipelineMlops.jpg)

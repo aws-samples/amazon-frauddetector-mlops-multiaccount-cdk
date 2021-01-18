@@ -1,8 +1,8 @@
 {
   "Name": "DemoStackUSWest2",
   "Variables": {
-    "DevAccount": "099075745180",
-    "ToolsAccount": "049581280676",
+    "DevAccount": "111111",
+    "ToolsAccount": "1333333",
     "DataBucket": "databucket-mlopsdemo-202013",
     "SourceRepoType": "stages.repo_action_codecommit.RepoActionCodeCommit",
     "SourceRepoBranch": "mainline",
