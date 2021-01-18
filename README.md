@@ -54,7 +54,7 @@ python ./src/main_demo_data_transformer.py --s3desturi s3://mybucket/fraud-demo/
 ### Training
 
 1. The scaffolding for training code is in [src/main_demo_fraud_detector_train.py](src/main_demo_fraud_detector_train.py). To run training with sample data that we created using the transformation step above. 
-**Note:** A prerequisite is the the roles need to be set up for Fraud detector to run. Use the cloudformation template,  [./build/cfn_fraud_detector_role.json](build/cfn_fraud_detector_role.json),  to set up fraud detector data access role
+**Note:** A prerequisite is the the roles need to be set up for Fraud detector to run. See [infra/README.md](infra/README.md) on how to set deploy fraud detector role
 
 
 ```bash 
