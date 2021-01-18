@@ -1,8 +1,8 @@
 # ML Ops using AWS Fraud detector
 ![docs/MultiAccountMLOps.png](docs/MultiAccountMLOps.png)
 
-## Basics
-Lets get AWS Fraud detector up and running in a single account first using a Notebook!
+## The Basics
+Lets get **AWS Fraud detector** up and running in a single account first using a Notebook!
 
 This section demonstrates how to train and deploy Amazon fraud detector using Boto3.
 
