@@ -1,0 +1,70 @@
+{
+  "Name": "DemoStackUSWest2",
+  "Variables": {
+    "DevAccount": "099075745180",
+    "ToolsAccount": "049581280676",
+    "DataBucket": "databucket-mlopsdemo-202013",
+    "SourceRepoType": "stages.repo_action_codecommit.RepoActionCodeCommit",
+    "SourceRepoBranch": "mainline",
+    "EmailApprover": "dummy@email.com"
+  },
+  "DependentVariables": {
+    "CodeCommitRepoArn": "arn:aws:codecommit:us-west-2:${ToolsAccount}:myml-pipeline",
+    "S3TrainingDataPrefix": "${DataBucket}/frauddetector-demo"
+  },
+  "Stacks": {
+    "S1EnvironmentBootstrap": {
+      "CDKDeploy": {
+        "BucketPath": "${DataBucket}/*",
+        "ToolAccount": "${ToolsAccount}"
+      }
+    },
+    "S2Data": {
+      "CDKDeploy": {
+        "BucketName": "${DataBucket}",
+        "PrincipalRoleArnCsvList": "arn:aws:iam::${DevAccount}:role/DemoStackUSWest2-S1EnvironmentBootstrap-FraudDetectorRole"
+      }
+    },
+    "S3MLPipeline": {
+      "CDKDesign": {
+        "RepoType": "${SourceRepoType}",
+        "Environments": [
+          {
+            "EnvName": "Dev",
+            "RequireManualApproval": 1
+          }
+        ],
+        "TrainStageType": "stages.train_stage_codebuild_long_polling.TrainStageCodeBuildLongPolling",
+        "DeployStageType": "stages.deploy_stage_codebuild.DeployStageCodeBuild"
+      },
+      "CDKDeploy": {
+        "CodeCommitRepositoryARN": "${CodeCommitRepoArn}",
+        "BranchName": "${SourceRepoBranch}",
+        "TrainDatauri": "s3://${S3TrainingDataPrefix}",
+        "TrainBuildspec": "build/buildspec.train.yml",
+        "TrainBuildImage": "aws/codebuild/standard:4.0",
+        "DeployBuildspec": "build/buildspec.deploy.yml",
+        "EmailApprover": "${EmailApprover}",
+        "EnvironmentParams": {
+          "Dev": {
+            "TrainToolsCodeBuildRole": "arn:aws:iam::${DevAccount}:role/DemoStackUSWest2-S1EnvironmentBootstrap-ToolAccessRole",
+            "DeployToolsCodeBuildRole": "arn:aws:iam::${DevAccount}:role/DemoStackUSWest2-S1EnvironmentBootstrap-ToolAccessRole",
+            "TrainServiceRole": "arn:aws:iam::${DevAccount}:role/DemoStackUSWest2-S1EnvironmentBootstrap-FraudDetectorRole",
+            "DeployServiceRole": " arn:aws:iam::${DevAccount}:role/DemoStackUSWest2-S1EnvironmentBootstrap-FraudDetectorRole"
+          }
+        }
+      }
+    },
+    "CIPipeline": {
+      "CDKDesign": {
+        "RepoType": "${SourceRepoType}"
+      },
+      "CDKDeploy": {
+        "CodeCommitRepositoryARN": "${CodeCommitRepoArn}",
+        "BranchName": "${SourceRepoBranch}",
+        "BuildSpec": "build/buildspec.build.yml",
+        "BuildImage": "aws/codebuild/standard:4.0"
+      }
+    }
+  }
+}

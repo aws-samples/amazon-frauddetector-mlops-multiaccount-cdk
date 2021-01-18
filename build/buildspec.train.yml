@@ -1,0 +1,46 @@
+version: 0.2
+
+env:
+  variables:
+    TRAINING_JOB_TYPE: frauddetector
+    ROLE_TO_ASSUME: "<SPECIFY-THIS-IN-CODEPIPELINE-ENVIRONMENT_VARIABLE>"
+    SERVICE_ROLE_TO_ASSUME: "<SPECIFY-THIS-IN-CODEPIPELINE-ENVIRONMENT_VARIABLE>"
+    DATA_URI: "<SPECIFY-THIS-IN-CODEPIPELINE-ENVIRONMENT_VARIABLE>"
+
+    pythonversion: 3.7
+    virtualenv: testenv
+
+  exported-variables:
+    - TRAINING_JOB_NAME
+    - TRAINING_JOB_VERSION
+    - TRAINING_JOB_TYPE
+    - MODEL_URI
+    - PROCESSED_DATAURI
+
+phases:
+  install:
+    runtime-versions:
+        python: $pythonversion
+
+
+  build:
+    commands:
+      # Runs tests
+      - touch train_log.txt
+      - echo Running tests
+      - bash ./build/run_tests.sh ${virtualenv}
+
+      # Trigger training..
+      - echo Triggering training
+      - aws sts get-caller-identity
+      - bash build/run_training.sh "${virtualenv}" "${SERVICE_ROLE_TO_ASSUME}"  "${DATA_URI}"  "${ROLE_TO_ASSUME}" > train_log.txt
+      - TRAINING_JOB_VERSION=`cat train_log.txt | sed -rn 's/^##ModelVersion##:(.+)$/\1/p'`
+      - TRAINING_JOB_NAME=`cat train_log.txt | sed -rn 's/^##ModelName##:(.+)$/\1/p'`
+
+      - echo Triggered $TRAINING_JOB_NAME version $TRAINING_JOB_VERSION
+
+    finally:
+      - cat train_log.txt
+
+
+

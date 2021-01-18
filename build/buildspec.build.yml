@@ -1,0 +1,39 @@
+version: 0.2
+
+
+env:
+    variables:
+      nodeversion: 10
+      pythonversion: 3.7
+      cdkartifactprefix: cdkartifacts-
+
+
+phases:
+
+  install:
+    runtime-versions:
+        python: $pythonversion
+        nodejs: $nodeversion
+
+
+
+  pre_build:
+    commands:
+    ##################################
+    # Any set up / config goes here
+    ##################################
+    - echo prebuild steps
+    - bash build/setup.sh
+    - bash build/cdk_setup.sh
+
+  build:
+    commands:
+# Runs tests
+      - echo Running tests
+      - bash build/run_tests.sh testenv
+      - bash build/cdk_validate_cfn.sh $cdkartifactprefix$(date +%Y%m%d%H%M%s)
+
+artifacts:
+  files:
+    - $cdkartifactprefix*/**/*
+

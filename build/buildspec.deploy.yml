@@ -1,0 +1,34 @@
+version: 0.2
+
+env:
+  variables:
+    TRAINING_JOB_NAME: "<PASS-FROM-TRAINING-JOB-ENV-VARIABLE>"
+    TRAINING_JOB_VERSION: "<SPECIFY-IN-CODE-BUILD-ENV-VARIABLES>"
+    DETECTOR_NAME: frauddetectordemodev1
+    ROLE_TO_ASSUME: "<SPECIFY-THIS-IN-CODEPIPELINE-ENVIRONMENT_VARIABLE>"
+
+
+    pythonversion: 3.7
+    virtualenv: testenv
+
+
+phases:
+  install:
+    runtime-versions:
+        python: $pythonversion
+
+
+  build:
+    commands:
+      - echo Running tests
+      - bash ./build/run_tests.sh ${virtualenv}
+
+      # Trigger training..
+      - echo Triggering training
+      - aws sts get-caller-identity
+      - bash build/run_deploy.sh "${virtualenv}" "${TRAINING_JOB_NAME}"  "${TRAINING_JOB_VERSION}" "${DETECTOR_NAME}" "${ROLE_TO_ASSUME}"
+
+
+
+
+

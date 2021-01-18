@@ -1,0 +1,27 @@
+{
+  "Name": "DemoStack",
+  "Stacks": {
+    "S3MLPipeline": {
+      "CDKDesign": {
+        "RepoType": "stages.repo_action_codecommit.RepoActionCodeCommit",
+        "Environments": [
+          {
+            "EnvName": "Dev",
+            "RequireManualApproval": 0
+          },
+          {
+            "EnvName": "Test",
+            "RequireManualApproval": 1
+          }
+        ],
+        "TrainStageType": "stages.train_stage_codebuild_long_polling.TrainStageCodeBuildLongPolling",
+        "DeployStageType": "stages.deploy_stage_codebuild.DeployStageCodeBuild"
+      }
+    },
+    "CIPipeline": {
+      "CDKDesign": {
+        "RepoType": "stages.repo_action_codecommit.RepoActionCodeCommit"
+      }
+    }
+  }
+}
