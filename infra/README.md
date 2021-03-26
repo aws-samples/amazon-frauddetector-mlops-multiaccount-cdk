@@ -36,7 +36,7 @@ This will create cloud formation templates in a directory `cdk.out`
 
 ### Multi account deployment
     
-1. To create CFN for the  full set of stacks for multi account deployment
+1. To create CFN for the  full set of stacks for multi account deployment. The parameters to deploy the CFN are defined in the sample json [build/ml_pipeline_config.sample.json](build/ml_pipeline_config.sample.json). You can customise this according to your needs. The main section you would need to usually change is the `variables` section.
 
     ```bash
     export PYTHONPATH=infra/src
