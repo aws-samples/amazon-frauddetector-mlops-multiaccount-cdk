@@ -19,7 +19,7 @@
 ## Set up
 
 ```
-$ pip install -r infra/requirements.txt
+$ pip install -r infra/src/requirements.txt
 ```
 
 ## To create the Cloudformation templates
@@ -54,7 +54,7 @@ If you do not have admin rights, then you can synthesize the cloudformation temp
    - Decide on the AWS accounts that fraud detector will run in , e.g `Dev AWS account -> Test Account -> Prod Account`
    - Decide on the tools account, the AWS  account in which the ML Ops pipeline runs in. This code pipeline will switch role from this account into the target environment account , e.g. dev, test etc
 
-### Step 1: Set up permissions on each target enviornment
+### Step 1: Set up permissions on each target environment
 1.  Run the `<prefix>-S1EnvironmentBootstrap.template.json` , which is created in CDK.out folder, for each account (e.g. dev, test, prod etc) you want to deploy fraud detector in. 
     
     **Note** The bucket you specify here, is used to create read access permission, but the bucket itself will be created in Step 2
